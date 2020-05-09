@@ -1,0 +1,427 @@
+学号：1767119229       姓名：顾发琛      班级：通信二班（2017）
+
+ 
+
+ 
+
+ 
+
+题目2：用scikit-learn加载iris数据集，采用KNN、SVM和朴素贝叶斯算法进行分类，最后比较这三种方法的优缺点。
+
+1）程序源代码内容
+
+from sklearn.datasets import make_blobs
+
+import pylab as plt
+
+from sklearn.svm import SVC
+
+from sklearn import metrics
+
+from sklearn.cluster import KMeans
+
+ 
+
+#X ,y = make_blobs(100, 2, 3)
+
+data, target = make_blobs(n_samples=100, n_features=2, centers=3)
+
+#print(data)
+
+#print(target)
+
+ 
+
+plt.scatter(data[:, 0], data[:, 1], c=target)
+
+plt.show()
+
+ 
+
+km = KMeans(n_clusters=4)
+
+km.fit(data, target)
+
+ 
+
+plt.subplot(221)
+
+plt.scatter(data[:, 0], data[:, 1], c=y)
+
+#clf = SVC(kernel='linear')
+
+#clf.fit(X, y)
+
+plt.subplot(222)
+
+#y_hat = clf.predict(X)
+
+#plt.show()
+
+y_hat = km.predict(data)
+
+#plt.scatter(data[:, 0], data[:, 1], c=target)
+
+#plt.show()
+
+#print(clf.support_vectors_)
+
+plt.scatter(data[:, 0], data[:, 1], c=y_hat)
+
+print(metrics.classification_report(y, y_hat))
+
+print(metrics.confusion_matrix(y, y_hat))
+
+plt.show()
+
+ 
+
+from sklearn.datasets import make_blobs
+
+import numpy as np
+
+import pylab as plt
+
+from sklearn.svm import SVC
+
+from sklearn import metrics
+
+ 
+
+X ,y = make_blobs(100, 2, 3)
+
+ 
+
+plt.subplot(221)
+
+plt.scatter(X[:, 0], X[:, 1], c=y)
+
+ 
+
+clf = SVC(kernel='linear')
+
+clf.fit(X, y)
+
+ 
+
+plt.subplot(222)
+
+y_hat = clf.predict(X)
+
+#plt.show()
+
+ 
+
+ 
+
+#print(clf.support_vectors_)
+
+plt.scatter(X[:, 0], X[:, 1], c=y_hat)
+
+print(metrics.classification_report(y, y_hat))
+
+print(metrics.confusion_matrix(y, y_hat))
+
+ 
+
+plt.show()
+
+ 
+
+from sklearn.datasets import make_blobs
+
+import pylab as plt
+
+from sklearn.svm import SVC
+
+from sklearn import metrics
+
+from sklearn.cluster import KMeans
+
+from sklearn.naive_bayes import GaussianNB#贝叶斯公式
+
+ 
+
+data, target = make_blobs(n_samples=100, n_features=2, centers=3)
+
+plt.scatter(data[:, 0], data[:, 1], c=target)
+
+plt.show()
+
+ 
+
+km = GaussianNB()
+
+km.fit(data, target)
+
+ 
+
+plt.subplot(221)
+
+plt.scatter(data[:, 0], data[:, 1], c=y)
+
+ 
+
+plt.subplot(222)
+
+y_hat = km.predict(data)
+
+plt.scatter(data[:, 0], data[:, 1], c=target)
+
+#plt.show()
+
+ 
+
+plt.scatter(data[:, 0], data[:, 1], c=y_hat)
+
+print(metrics.classification_report(y, y_hat))
+
+print(metrics.confusion_matrix(y, y_hat))
+
+#print(model.score(data, target))
+
+plt.show()
+
+ 
+
+2）程序运行界面抓图
+
+ 
+
+
+
+
+
+
+
+3）结果分析
+
+KNN：
+
+ 由于KNN方法主要靠周围有限的邻近的样本，而不是靠判别类域的方法来确定所属类别的，因此对于类域的交叉或重叠较多的待分样本集来说，KNN方法较其他方法更为适合。
+
+该算法比较适用于样本容量比较大的类域的自动分类，而那些样本容量较小的类域采用这种算法比较容易产生误分。
+
+SVM:
+
+可以解决小样本情况下的机器学习问题但是对缺失数据敏感。
+
+贝叶斯：
+
+对缺失数据不太敏感，算法也比较简单但是分类决策存在错误率。
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+题目4：自定义一个可微并且存在最小值的一元函数，用梯度下降法求其最小值。并绘制出学习率从0.1到0.9（步长0.1）时，达到最小值时所迭代的次数的关系曲线，根据该曲线给出简单的分析。
+
+1）程序源代码内容
+
+import numpy as np
+
+import pylab as plt
+
+ 
+
+def f(x):
+
+    return 2 * x * x - 2 * x + 10
+
+ 
+
+def df(x):
+
+    return 4 * x - 2
+
+ 
+
+x = np.linspace(-10, 10)
+
+y = f(x)
+
+ 
+
+x0 = -5
+
+y0 = f(x0)
+
+dy0 = df(x0)
+
+ 
+
+plt.scatter(x0, y0, color='g')
+
+ 
+
+x1 = np.linspace(-8, 8)
+
+y1 = dy0 * (x1 -x0) + y0
+
+ 
+
+plt.plot(x, y, color='r')
+
+plt.plot(x1, y1, color='y')
+
+ 
+
+eta = 0.1
+
+for step in range(1000):
+
+    x0 = x0 - eta * df(x0)
+
+    plt.scatter(x0, f(x0), color='g')
+
+    x1 = np.linspace(-8, 8)
+
+    y1 = df(x0) * (x1 -x0) + f(x0)   
+
+    plt.plot(x1, y1, color='y')
+
+       
+
+plt.scatter(x0, f(x0), color='b')
+
+print(df(x0))
+
+plt.show()
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+2）程序运行界面抓图
+
+eta = 0.1
+
+
+
+ 
+
+eta = 0.2
+
+ 
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+eta = 0.3
+
+
+
+ 
+
+eta = 0.4
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+eta = 0.5
+
+
+
+ 
+
+eta = 0.6
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+eta = 0.7
+
+
+
+eta = 0.8
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+eta = 0.9
+
+
+
+ 
+
+3）结果分析
+
+学习率较小时，收敛到正确结果的速度较慢,学习率较大时，容易在搜索过程中发生震荡。
+
+ 
+
+ 
+
+
